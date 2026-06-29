@@ -1,0 +1,1009 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>KREEZ — DPI Bypass Guide</title>
+    <style>
+        :root {
+            --bg:        #080808;
+            --surface:   #0F0F0F;
+            --surface2:  #161616;
+            --border:    #1E1E1E;
+            --border2:   #2A2A2A;
+            --text:      #FFFFFF;
+            --sub:       #666666;
+            --muted:     #444444;
+            --ok:        #22C55E;
+            --error:     #EF4444;
+            --warn:      #F59E0B;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Consolas', 'Courier New', monospace;
+            line-height: 1.7;
+            font-size: 14px;
+        }
+
+        /* ── Scrollbar ── */
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: var(--surface); }
+        ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+
+        /* ── Navigation ── */
+        nav {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            height: 52px;
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 40px;
+            z-index: 1000;
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+
+        .nav-logo-text {
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: 3px;
+            color: var(--text);
+        }
+
+        .nav-logo-sub {
+            font-size: 11px;
+            color: var(--sub);
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 32px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--sub);
+            text-decoration: none;
+            font-size: 11px;
+            letter-spacing: 1px;
+            transition: color 0.15s;
+        }
+
+        .nav-links a:hover { color: var(--text); }
+
+        .nav-discord {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: transparent;
+            border: 1px solid var(--border2);
+            padding: 6px 14px;
+            color: var(--sub) !important;
+            font-size: 11px;
+            text-decoration: none;
+            transition: border-color 0.15s, color 0.15s;
+        }
+
+        .nav-discord:hover {
+            border-color: var(--sub) !important;
+            color: var(--text) !important;
+        }
+
+        /* ── Hero ── */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 100px 40px 80px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .hero-tag {
+            font-size: 10px;
+            letter-spacing: 3px;
+            color: var(--sub);
+            margin-bottom: 24px;
+        }
+
+        .hero-title {
+            font-size: clamp(42px, 8vw, 80px);
+            font-weight: 700;
+            letter-spacing: -1px;
+            line-height: 1;
+            margin-bottom: 12px;
+        }
+
+        .hero-title span { color: var(--sub); font-weight: 400; }
+
+        .hero-sub {
+            font-size: 14px;
+            color: var(--sub);
+            max-width: 560px;
+            margin-bottom: 48px;
+            line-height: 1.8;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            font-family: 'Consolas', monospace;
+            font-size: 12px;
+            text-decoration: none;
+            border: 1px solid var(--border2);
+            cursor: pointer;
+            transition: all 0.15s;
+            background: var(--surface2);
+            color: var(--text);
+        }
+
+        .btn:hover {
+            border-color: var(--sub);
+            background: var(--border);
+        }
+
+        .btn-primary {
+            background: var(--text);
+            color: var(--bg);
+            border-color: var(--text);
+        }
+
+        .btn-primary:hover {
+            background: #E0E0E0;
+            border-color: #E0E0E0;
+        }
+
+        /* ── Sections ── */
+        .section {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 80px 40px;
+            border-top: 1px solid var(--border);
+        }
+
+        .section-tag {
+            font-size: 9px;
+            letter-spacing: 3px;
+            color: var(--sub);
+            margin-bottom: 12px;
+        }
+
+        .section-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .section-desc {
+            font-size: 12px;
+            color: var(--sub);
+            margin-bottom: 40px;
+            line-height: 1.8;
+        }
+
+        /* ── Cards ── */
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 1px;
+            background: var(--border);
+            border: 1px solid var(--border);
+        }
+
+        .card {
+            background: var(--surface);
+            padding: 24px;
+        }
+
+        .card-icon {
+            font-size: 22px;
+            margin-bottom: 12px;
+            color: var(--sub);
+        }
+
+        .card-title {
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            letter-spacing: 1px;
+        }
+
+        .card-desc {
+            font-size: 11px;
+            color: var(--sub);
+            line-height: 1.8;
+        }
+
+        /* ── Steps ── */
+        .steps { display: flex; flex-direction: column; gap: 1px; }
+
+        .step {
+            display: grid;
+            grid-template-columns: 48px 1fr;
+            gap: 24px;
+            background: var(--border);
+        }
+
+        .step-num {
+            background: var(--surface);
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            padding: 24px 0 0;
+            font-size: 11px;
+            color: var(--muted);
+            font-weight: 700;
+        }
+
+        .step-content {
+            background: var(--surface);
+            padding: 24px 24px 24px 0;
+        }
+
+        .step-title {
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .step-desc {
+            font-size: 12px;
+            color: var(--sub);
+            line-height: 1.8;
+        }
+
+        /* ── Tab Docs ── */
+        .tabs-doc { display: flex; flex-direction: column; gap: 1px; }
+
+        .tab-doc {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            overflow: hidden;
+        }
+
+        .tab-doc-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px 20px;
+            cursor: pointer;
+            border-bottom: 1px solid transparent;
+            transition: background 0.15s;
+        }
+
+        .tab-doc-header:hover { background: var(--surface2); }
+
+        .tab-doc.open .tab-doc-header {
+            border-bottom-color: var(--border);
+        }
+
+        .tab-icon {
+            font-size: 18px;
+            width: 32px;
+            text-align: center;
+            color: var(--sub);
+        }
+
+        .tab-doc.open .tab-icon { color: var(--text); }
+
+        .tab-doc-title {
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            flex: 1;
+        }
+
+        .tab-doc-arrow {
+            color: var(--muted);
+            font-size: 11px;
+            transition: transform 0.2s;
+        }
+
+        .tab-doc.open .tab-doc-arrow { transform: rotate(90deg); }
+
+        .tab-doc-body {
+            display: none;
+            padding: 20px 24px 24px;
+        }
+
+        .tab-doc.open .tab-doc-body { display: block; }
+
+        .tab-doc-body p {
+            font-size: 12px;
+            color: var(--sub);
+            line-height: 1.9;
+            margin-bottom: 12px;
+        }
+
+        .tab-doc-body ul {
+            list-style: none;
+            padding: 0;
+            margin-bottom: 12px;
+        }
+
+        .tab-doc-body ul li {
+            font-size: 12px;
+            color: var(--sub);
+            padding: 4px 0;
+            padding-left: 16px;
+            position: relative;
+        }
+
+        .tab-doc-body ul li::before {
+            content: '—';
+            position: absolute;
+            left: 0;
+            color: var(--muted);
+        }
+
+        .tab-doc-body .highlight {
+            color: var(--text);
+            font-weight: 600;
+        }
+
+        /* ── Code block ── */
+        .code-block {
+            background: var(--surface2);
+            border: 1px solid var(--border2);
+            padding: 14px 16px;
+            font-size: 11px;
+            color: var(--ok);
+            margin: 10px 0;
+            overflow-x: auto;
+            white-space: pre;
+        }
+
+        /* ── FAQ ── */
+        .faq { display: flex; flex-direction: column; gap: 1px; }
+
+        .faq-item {
+            background: var(--surface);
+            border: 1px solid var(--border);
+        }
+
+        .faq-q {
+            padding: 16px 20px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background 0.15s;
+        }
+
+        .faq-q:hover { background: var(--surface2); }
+
+        .faq-a {
+            display: none;
+            padding: 0 20px 16px;
+            font-size: 11px;
+            color: var(--sub);
+            line-height: 1.9;
+            border-top: 1px solid var(--border);
+        }
+
+        .faq-item.open .faq-a { display: block; }
+
+        .faq-toggle {
+            color: var(--muted);
+            font-size: 11px;
+            transition: transform 0.2s;
+        }
+
+        .faq-item.open .faq-toggle { transform: rotate(45deg); }
+
+        /* ── Discord CTA ── */
+        .cta {
+            background: var(--surface);
+            border: 1px solid var(--border2);
+            padding: 60px 40px;
+            text-align: center;
+        }
+
+        .cta-title {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .cta-sub {
+            font-size: 12px;
+            color: var(--sub);
+            margin-bottom: 32px;
+            line-height: 1.8;
+        }
+
+        .cta-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* ── Badges ── */
+        .badge {
+            display: inline-block;
+            padding: 3px 8px;
+            font-size: 9px;
+            letter-spacing: 1px;
+            font-weight: 700;
+            margin-left: 8px;
+            vertical-align: middle;
+        }
+
+        .badge-ok  { background: rgba(34,197,94,0.15); color: var(--ok); border: 1px solid rgba(34,197,94,0.3); }
+        .badge-new { background: rgba(255,255,255,0.08); color: var(--sub); border: 1px solid var(--border2); }
+
+        /* ── Status dot ── */
+        .dot {
+            width: 6px; height: 6px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 6px;
+        }
+        .dot-ok { background: var(--ok); }
+
+        /* ── Footer ── */
+        footer {
+            border-top: 1px solid var(--border);
+            padding: 32px 40px;
+            max-width: 900px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        footer span {
+            font-size: 10px;
+            color: var(--muted);
+        }
+
+        footer a {
+            font-size: 10px;
+            color: var(--sub);
+            text-decoration: none;
+        }
+
+        footer a:hover { color: var(--text); }
+
+        /* ── Strategy pills ── */
+        .strategy-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1px;
+            background: var(--border);
+            border: 1px solid var(--border);
+            margin-bottom: 20px;
+        }
+
+        .strategy-card {
+            background: var(--surface);
+            padding: 20px;
+        }
+
+        .strategy-name {
+            font-size: 12px;
+            font-weight: 700;
+            margin-bottom: 6px;
+            letter-spacing: 1px;
+        }
+
+        .strategy-desc {
+            font-size: 11px;
+            color: var(--sub);
+            line-height: 1.8;
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 600px) {
+            nav { padding: 0 16px; }
+            .nav-links { display: none; }
+            .hero, .section { padding: 80px 20px 60px; }
+            .hero-title { font-size: 36px; }
+            footer { padding: 24px 20px; }
+            .cta { padding: 40px 20px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ═══ NAV ═══ -->
+<nav>
+    <a href="#" class="nav-logo">
+        <span class="nav-logo-text">KREEZ</span>
+        <span class="nav-logo-sub">/ DPI BYPASS</span>
+    </a>
+    <ul class="nav-links">
+        <li><a href="#start">НАЧАЛО</a></li>
+        <li><a href="#tabs">РАЗДЕЛЫ</a></li>
+        <li><a href="#strategies">СТРАТЕГИИ</a></li>
+        <li><a href="#faq">FAQ</a></li>
+        <li>
+            <a href="https://discord.gg/FH2rARnYgh" target="_blank" rel="noopener" class="nav-discord">
+                ⬡ DISCORD
+            </a>
+        </li>
+    </ul>
+</nav>
+
+
+<!-- ═══ HERO ═══ -->
+<section class="hero">
+    <p class="hero-tag">// ДОКУМЕНТАЦИЯ v1.0</p>
+    <h1 class="hero-title">KREEZ<span>.</span></h1>
+    <p class="hero-sub">
+        Менеджер DPI-обхода для Windows.<br/>
+        Автоматически скачивает и запускает zapret/winws, обходит блокировки YouTube,<br/>
+        Discord, Telegram и других сервисов без VPN.
+    </p>
+    <div class="hero-actions">
+        <a href="#start" class="btn btn-primary">[ начать ]</a>
+        <a href="https://discord.gg/FH2rARnYgh" target="_blank" rel="noopener" class="btn">[ discord поддержка ]</a>
+    </div>
+</section>
+
+
+<!-- ═══ WHAT IS KREEZ ═══ -->
+<section class="section" id="about">
+    <p class="section-tag">// ЧТО ЭТО</p>
+    <h2 class="section-title">Как это работает</h2>
+    <p class="section-desc">
+        KREEZ — это графическая оболочка над <strong style="color:var(--text)">winws.exe</strong> (проект zapret).<br/>
+        Приложение автоматически скачивает нужные бинарники, управляет процессом обхода<br/>
+        и позволяет настраивать стратегии без терминала.
+    </p>
+    <div class="cards">
+        <div class="card">
+            <div class="card-icon">⟳</div>
+            <div class="card-title">АВТО-ЗАГРУЗКА</div>
+            <div class="card-desc">При первом запуске KREEZ сам скачивает zapret с GitHub. Ничего не нужно устанавливать вручную.</div>
+        </div>
+        <div class="card">
+            <div class="card-icon">◎</div>
+            <div class="card-title">DPI-ОБХОД</div>
+            <div class="card-desc">Использует WinDivert для перехвата пакетов и обмана Deep Packet Inspection провайдера.</div>
+        </div>
+        <div class="card">
+            <div class="card-icon">⊞</div>
+            <div class="card-title">БЕЗ VPN</div>
+            <div class="card-desc">Работает на уровне сетевых пакетов. Не замедляет соединение, не требует сторонних серверов.</div>
+        </div>
+        <div class="card">
+            <div class="card-icon">✦</div>
+            <div class="card-title">СВОИ СЕРВИСЫ</div>
+            <div class="card-desc">Добавляй любые домены и IP-диапазоны через встроенный редактор. Полный контроль над списками.</div>
+        </div>
+    </div>
+</section>
+
+
+<!-- ═══ QUICK START ═══ -->
+<section class="section" id="start">
+    <p class="section-tag">// БЫСТРЫЙ СТАРТ</p>
+    <h2 class="section-title">Первый запуск</h2>
+    <p class="section-desc">Три шага от установки до работающего обхода.</p>
+
+    <div class="steps">
+        <div class="step">
+            <div class="step-num">01</div>
+            <div class="step-content">
+                <div class="step-title">Запусти KreezApp.exe от имени администратора</div>
+                <div class="step-desc">
+                    Правой кнопкой → «Запустить от имени администратора».<br/>
+                    WinDivert требует права администратора для перехвата пакетов.<br/>
+                    Если запустить без прав — обход не запустится, появится ошибка.
+                </div>
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-num">02</div>
+            <div class="step-content">
+                <div class="step-title">Дождись автозагрузки zapret</div>
+                <div class="step-desc">
+                    При первом запуске KREEZ автоматически скачает <span class="highlight">winws.exe</span>,
+                    <span class="highlight">WinDivert.dll</span> и драйвер <span class="highlight">WinDivert64.sys</span>
+                    с GitHub.<br/>
+                    Прогресс отображается в главном окне. Обычно занимает 10–30 секунд.
+                </div>
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-num">03</div>
+            <div class="step-content">
+                <div class="step-title">Нажми [ START ]</div>
+                <div class="step-desc">
+                    Включи нужные сервисы во вкладке <span class="highlight">⊞ Сервисы</span>,
+                    выбери стратегию в <span class="highlight">◉ Стратегия</span>
+                    и нажми <span class="highlight">[ START ]</span> на главной вкладке.<br/>
+                    Зелёная точка и статус <span class="highlight" style="color:var(--ok)">Обход активен</span> — всё работает.
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- ═══ REQUIREMENTS ═══ -->
+<section class="section" id="requirements">
+    <p class="section-tag">// ТРЕБОВАНИЯ</p>
+    <h2 class="section-title">Что нужно</h2>
+
+    <div class="cards">
+        <div class="card">
+            <div class="card-title">ОС</div>
+            <div class="card-desc">Windows 10 / 11 (x64)<br/><br/>WinDivert не поддерживает 32-bit и Windows 7/8.</div>
+        </div>
+        <div class="card">
+            <div class="card-title">ПРАВА</div>
+            <div class="card-desc">Администратор обязателен.<br/><br/>Нужен для загрузки драйвера WinDivert64.sys в ядро.</div>
+        </div>
+        <div class="card">
+            <div class="card-title">ИНТЕРНЕТ</div>
+            <div class="card-desc">Нужен только при первом запуске (скачать zapret) и при проверке обновлений.</div>
+        </div>
+        <div class="card">
+            <div class="card-title">АНТИВИРУС</div>
+            <div class="card-desc">Может срабатывать на WinDivert.dll/sys. Добавь папку KREEZ в исключения. Это ложное срабатывание.</div>
+        </div>
+    </div>
+</section>
+
+
+<!-- ═══ TABS GUIDE ═══ -->
+<section class="section" id="tabs">
+    <p class="section-tag">// РАЗДЕЛЫ ПРИЛОЖЕНИЯ</p>
+    <h2 class="section-title">Что где находится</h2>
+    <p class="section-desc">Нажми на раздел чтобы развернуть описание.</p>
+
+    <div class="tabs-doc">
+
+        <div class="tab-doc open">
+            <div class="tab-doc-header" onclick="toggleTab(this)">
+                <span class="tab-icon">⌂</span>
+                <span class="tab-doc-title">ГЛАВНАЯ</span>
+                <span class="tab-doc-arrow">▶</span>
+            </div>
+            <div class="tab-doc-body">
+                <p>Центр управления обходом. Отсюда запускаешь и останавливаешь winws.exe.</p>
+                <ul>
+                    <li><span class="highlight">Статус</span> — цветная точка: серая (стоп), оранжевая (запуск), зелёная (активен), красная (ошибка)</li>
+                    <li><span class="highlight">[ START ]</span> — запустить обход с текущей стратегией и включёнными сервисами</li>
+                    <li><span class="highlight">[ STOP ]</span> — остановить winws.exe</li>
+                    <li><span class="highlight">[ RESTART ]</span> — перезапуск (применяет новые настройки без перехода в другую вкладку)</li>
+                    <li><span class="highlight">[ check updates ]</span> — проверить обновления zapret на GitHub</li>
+                    <li><span class="highlight">Лог-консоль</span> — вывод winws.exe в реальном времени, полезно для диагностики</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="tab-doc">
+            <div class="tab-doc-header" onclick="toggleTab(this)">
+                <span class="tab-icon">⊞</span>
+                <span class="tab-doc-title">СЕРВИСЫ</span>
+                <span class="tab-doc-arrow">▶</span>
+            </div>
+            <div class="tab-doc-body">
+                <p>Список встроенных сервисов. Включай только те, которые нужно обойти — лишние нагружают winws впустую.</p>
+                <ul>
+                    <li><span class="highlight">YouTube</span> — youtube.com, googlevideo.com и CDN</li>
+                    <li><span class="highlight">Discord</span> — discord.com, CDN, голосовые серверы</li>
+                    <li><span class="highlight">Telegram</span> — t.me и telegram.org</li>
+                    <li><span class="highlight">Faceit</span> — серверы EU (185.25.204.0/24)</li>
+                    <li><span class="highlight">Rust</span> — игровые серверы</li>
+                    <li><span class="highlight">Amazon / Prime Video</span> — primevideo.com, cloudfront.net</li>
+                    <li><span class="highlight">Twitch</span> — twitch.tv и CDN</li>
+                    <li><span class="highlight">OpenAI / ChatGPT</span> — openai.com, api.openai.com</li>
+                </ul>
+                <p>Переключатель справа — toggle вкл/выкл. Изменения применяются после перезапуска обхода.</p>
+            </div>
+        </div>
+
+        <div class="tab-doc">
+            <div class="tab-doc-header" onclick="toggleTab(this)">
+                <span class="tab-icon">◈</span>
+                <span class="tab-doc-title">IP-АДРЕСА</span>
+                <span class="tab-doc-arrow">▶</span>
+            </div>
+            <div class="tab-doc-body">
+                <p>Ручное управление IP-листом (ipset). Используется для точечного обхода по IP-диапазонам когда домена недостаточно.</p>
+                <ul>
+                    <li>Вводи адреса в формате <span class="highlight">1.2.3.4</span> или <span class="highlight">1.2.3.0/24</span></li>
+                    <li>Описание — опционально, для твоих пометок</li>
+                    <li>Кнопки <span class="highlight">[ IMPORT ]</span> и <span class="highlight">[ EXPORT ]</span> — загрузка/выгрузка списка в .txt</li>
+                    <li>Кнопка <span class="highlight">✕</span> справа — удалить конкретный адрес</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="tab-doc">
+            <div class="tab-doc-header" onclick="toggleTab(this)">
+                <span class="tab-icon">◉</span>
+                <span class="tab-doc-title">СТРАТЕГИЯ ОБХОДА</span>
+                <span class="tab-doc-arrow">▶</span>
+            </div>
+            <div class="tab-doc-body">
+                <p>Метод, которым winws.exe обманывает DPI провайдера. Разные провайдеры реагируют на разные стратегии — попробуй несколько если одна не работает.</p>
+                <ul>
+                    <li><span class="highlight">AUTO</span> — комбинация fake + multisplit, подходит большинству. Начни с него.</li>
+                    <li><span class="highlight">FAKE TLS</span> — подменяет TLS ClientHello фейковым пакетом с TTL=5</li>
+                    <li><span class="highlight">MULTISPLIT</span> — разбивает первый пакет на фрагменты, DPI не успевает собрать</li>
+                    <li><span class="highlight">DISORDER</span> — disorder2 + multisplit, более агрессивный вариант</li>
+                    <li><span class="highlight">FAKE QUIC</span> — обход UDP/QUIC блокировок (YouTube нередко использует QUIC)</li>
+                    <li><span class="highlight">COMBO MAX</span> — три блока: HTTPS + HTTP + Discord QUIC одновременно</li>
+                </ul>
+                <p>Секция <span class="highlight">Ручные аргументы</span> — для продвинутых пользователей. Включи toggle и введи аргументы напрямую в winws.exe. Полностью заменяют выбранную стратегию.</p>
+                <div class="code-block">--wf-tcp=80,443 --dpi-desync=fake,multisplit --dpi-desync-ttl=5</div>
+            </div>
+        </div>
+
+        <div class="tab-doc">
+            <div class="tab-doc-header" onclick="toggleTab(this)">
+                <span class="tab-icon">✦</span>
+                <span class="tab-doc-title">СВОИ СЕРВИСЫ</span>
+                <span class="tab-doc-arrow">▶</span>
+            </div>
+            <div class="tab-doc-body">
+                <p>Добавляй любые сайты и серверы которых нет в стандартном списке. KREEZ сгенерирует нужные файлы списков автоматически.</p>
+                <ul>
+                    <li><span class="highlight">Название</span> — любое, для тебя</li>
+                    <li><span class="highlight">Цвет</span> — HEX-код, цветная полоска в списке</li>
+                    <li><span class="highlight">Описание</span> — заметка, необязательно</li>
+                    <li><span class="highlight">Домены</span> — по одному на строку, например <code style="color:var(--ok)">example.com</code></li>
+                    <li><span class="highlight">IP-диапазоны</span> — по одному на строку, например <code style="color:var(--ok)">1.2.3.0/24</code></li>
+                </ul>
+                <p>После добавления KREEZ запишет домены в <span class="highlight">list-custom-domains.txt</span> и IP-адреса в <span class="highlight">ipset-custom-services.txt</span>. Перезапусти обход чтобы применить.</p>
+                <p>Кнопка <span class="highlight">✎</span> — редактировать существующий сервис. Кнопка <span class="highlight">✕</span> — удалить.</p>
+            </div>
+        </div>
+
+        <div class="tab-doc">
+            <div class="tab-doc-header" onclick="toggleTab(this)">
+                <span class="tab-icon">⚙</span>
+                <span class="tab-doc-title">НАСТРОЙКИ</span>
+                <span class="tab-doc-arrow">▶</span>
+            </div>
+            <div class="tab-doc-body">
+                <p>Системные настройки приложения.</p>
+                <ul>
+                    <li><span class="highlight">Автозапуск</span> — запускать KREEZ при старте Windows (через реестр HKCU)</li>
+                    <li><span class="highlight">Авто-обновление</span> — автоматически проверять обновления zapret при запуске</li>
+                    <li><span class="highlight">Интервал обновлений</span> — как часто проверять (ежедневно / еженедельно / ежемесячно)</li>
+                    <li><span class="highlight">Путь к zapret</span> — путь к папке bin с winws.exe. Обычно не нужно менять вручную.</li>
+                    <li><span class="highlight">Тема</span> — системная / светлая / тёмная</li>
+                </ul>
+                <p>Нажми <span class="highlight">[ SAVE ]</span> чтобы сохранить изменения.</p>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+
+<!-- ═══ STRATEGIES ═══ -->
+<section class="section" id="strategies">
+    <p class="section-tag">// СТРАТЕГИИ</p>
+    <h2 class="section-title">Какую стратегию выбрать</h2>
+    <p class="section-desc">
+        Начни с <strong style="color:var(--text)">AUTO</strong> — он работает у большинства российских провайдеров.
+        Если не помогает — пробуй по порядку сверху вниз.
+    </p>
+
+    <div class="strategy-grid">
+        <div class="strategy-card">
+            <div class="strategy-name"><span class="dot dot-ok"></span>AUTO <span class="badge badge-ok">РЕКОМЕНДУЕТСЯ</span></div>
+            <div class="strategy-desc">Fake TLS + multisplit комбо. Оптимальный баланс совместимости и скорости. Работает у большинства провайдеров.</div>
+        </div>
+        <div class="strategy-card">
+            <div class="strategy-name">FAKE TLS</div>
+            <div class="strategy-desc">Подменяет TLS-рукопожатие. Эффективен когда провайдер анализирует только первый пакет соединения.</div>
+        </div>
+        <div class="strategy-card">
+            <div class="strategy-name">MULTISPLIT</div>
+            <div class="strategy-desc">Фрагментирует первый пакет. DPI не успевает собрать данные для анализа. Хорошо работает на высоких скоростях.</div>
+        </div>
+        <div class="strategy-card">
+            <div class="strategy-name">DISORDER</div>
+            <div class="strategy-desc">Disorder2 + multisplit. Более агрессивный вариант — отправляет пакеты в неправильном порядке с намеренным перекрытием.</div>
+        </div>
+        <div class="strategy-card">
+            <div class="strategy-name">FAKE QUIC</div>
+            <div class="strategy-desc">Только для UDP/QUIC (порт 443 UDP). YouTube и Google активно используют QUIC — этот режим помогает когда TCP-стратегии не справляются.</div>
+        </div>
+        <div class="strategy-card">
+            <div class="strategy-name">COMBO MAX <span class="badge badge-new">МОЩНЫЙ</span></div>
+            <div class="strategy-desc">Три блока одновременно: HTTPS (TCP 443), HTTP (TCP 80) и Discord QUIC (UDP 443). Максимальное покрытие, чуть выше нагрузка на CPU.</div>
+        </div>
+    </div>
+
+    <p style="font-size:11px; color:var(--sub); margin-top:16px; line-height:1.9">
+        Не знаешь что выбрать? Спроси в <a href="https://discord.gg/FH2rARnYgh" target="_blank" style="color:var(--sub)">Discord</a> — скажи своего провайдера и что блокируется.
+    </p>
+</section>
+
+
+<!-- ═══ FAQ ═══ -->
+<section class="section" id="faq">
+    <p class="section-tag">// ВОПРОСЫ</p>
+    <h2 class="section-title">Частые вопросы</h2>
+
+    <div class="faq">
+
+        <div class="faq-item open">
+            <div class="faq-q" onclick="toggleFaq(this)">
+                Антивирус ругается на WinDivert — это опасно?
+                <span class="faq-toggle">+</span>
+            </div>
+            <div class="faq-a">
+                Нет. WinDivert — это легитимный Windows-драйвер для перехвата сетевых пакетов.
+                Антивирусы срабатывают из-за эвристики (драйвер ядра + перехват пакетов = подозрительно).
+                Добавь папку KREEZ в исключения антивируса. Если хочешь убедиться — исходный код winws
+                открыт на GitHub (zapret by bol-van).
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-q" onclick="toggleFaq(this)">
+                Обход не запускается, пишет «процесс завершился сразу»
+                <span class="faq-toggle">+</span>
+            </div>
+            <div class="faq-a">
+                Самые частые причины:
+                <br/>1. Запущено без прав администратора — перезапусти от имени администратора.
+                <br/>2. Антивирус заблокировал WinDivert64.sys — добавь в исключения.
+                <br/>3. Другой экземпляр winws.exe уже работает — открой Диспетчер задач и завершите его.
+                <br/>4. Путь к zapret указан неверно — зайди в Настройки и исправь.
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-q" onclick="toggleFaq(this)">
+                YouTube работает, но Discord нет (или наоборот)
+                <span class="faq-toggle">+</span>
+            </div>
+            <div class="faq-a">
+                Убедись что нужный сервис включён во вкладке ⊞ Сервисы.
+                Попробуй разные стратегии — Discord часто требует другой подход чем YouTube.
+                COMBO MAX включает одновременно несколько методов для разных протоколов.
+                Если ничего не помогает — напиши в Discord с указанием провайдера.
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-q" onclick="toggleFaq(this)">
+                Замедляет ли KREEZ интернет?
+                <span class="faq-toggle">+</span>
+            </div>
+            <div class="faq-a">
+                Незначительно. winws.exe обрабатывает только первые несколько пакетов соединения,
+                основной трафик проходит без обработки. На обычном ПК нагрузка на CPU составляет
+                0–2%. На очень медленных процессорах или при большом количестве одновременных
+                соединений возможно небольшое снижение скорости.
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-q" onclick="toggleFaq(this)">
+                Как добавить свой сайт в обход?
+                <span class="faq-toggle">+</span>
+            </div>
+            <div class="faq-a">
+                Вкладка ✦ Свои сервисы → введи название → добавь домены (по одному на строку)
+                и/или IP-диапазоны → нажми [ добавить сервис ].
+                После этого нажми [ RESTART ] на главной вкладке чтобы применить изменения.
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-q" onclick="toggleFaq(this)">
+                Где хранятся настройки?
+                <span class="faq-toggle">+</span>
+            </div>
+            <div class="faq-a">
+                Все настройки хранятся в файле <code style="color:var(--ok)">config.json</code> рядом с KreezApp.exe.
+                Zapret (winws.exe и списки) скачивается в папку <code style="color:var(--ok)">zapret/</code> там же.
+                Кастомные списки — в <code style="color:var(--ok)">zapret/lists/list-custom-domains.txt</code>
+                и <code style="color:var(--ok)">zapret/lists/ipset-custom-services.txt</code>.
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-q" onclick="toggleFaq(this)">
+                Работает ли с корпоративной сетью / VPN?
+                <span class="faq-toggle">+</span>
+            </div>
+            <div class="faq-a">
+                В корпоративных сетях провайдером является корпоративный файрвол, а не домашний ISP.
+                Результаты варьируются. С VPN обход обычно не нужен — VPN уже шифрует трафик.
+                Запускать KREEZ одновременно с VPN не рекомендуется.
+            </div>
+        </div>
+
+    </div>
+</section>
+
+
+<!-- ═══ DISCORD CTA ═══ -->
+<section class="section" style="padding-bottom: 0; border-top: none;">
+    <div class="cta">
+        <h2 class="cta-title">Нужна помощь?</h2>
+        <p class="cta-sub">
+            Вступай в Discord — там можно спросить про настройку,<br/>
+            сообщить о баге, предложить новый сервис или стратегию.
+        </p>
+        <div class="cta-actions">
+            <a href="https://discord.gg/FH2rARnYgh" target="_blank" rel="noopener" class="btn btn-primary">
+                [ вступить в discord ]
+            </a>
+        </div>
+    </div>
+</section>
+
+
+<!-- ═══ FOOTER ═══ -->
+<footer>
+    <span>KREEZ — DPI Bypass Manager</span>
+    <div style="display:flex; gap:24px; align-items:center;">
+        <a href="https://discord.gg/FH2rARnYgh" target="_blank" rel="noopener">Discord</a>
+        <a href="https://github.com/bol-van/zapret" target="_blank" rel="noopener">zapret (github)</a>
+        <span style="color:var(--muted)">// запускай с умом</span>
+    </div>
+</footer>
+
+
+<!-- ═══ JS ═══ -->
+<script>
+    function toggleTab(header) {
+        const doc = header.closest('.tab-doc');
+        doc.classList.toggle('open');
+    }
+
+    function toggleFaq(q) {
+        const item = q.closest('.faq-item');
+        item.classList.toggle('open');
+    }
+
+    // Highlight active nav link on scroll
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('.nav-links a[href^="#"]');
+
+    window.addEventListener('scroll', () => {
+        let current = '';
+        sections.forEach(s => {
+            if (window.scrollY >= s.offsetTop - 80) current = s.id;
+        });
+        navLinks.forEach(a => {
+            a.style.color = a.getAttribute('href') === '#' + current
+                ? 'var(--text)' : '';
+        });
+    });
+</script>
+</body>
+</html>
